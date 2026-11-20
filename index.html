@@ -6,34 +6,37 @@
     <title>Cruzadinha - Arquitetura Computacional</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-    <!-- Link para o CSS separado -->
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="background-grid"></div>
-
     <header class="game-header">
         <div class="title-box">
-            <span class="badge-sprint">SPRINT 3 // HARDWARE CHALLENGE</span>
-            <h1>ARQ<span class="highlight-red">COMP</span> CROSSWORD</h1>
+            <span class="badge-sprint">SPRINT 3 • ARQUITETURA COMPUTACIONAL</span>
+            <h1>CRUZADINHA <span class="highlight-red">DE HARDWARE</span></h1>
         </div>
 
-        <div class="hud-panel">
+        <div class="header-right-area">
             <div class="score-display">
                 <span class="hud-label">PROGRESSO</span>
                 <span id="contador-acertos" class="hud-value">0 de 12 palavras</span>
             </div>
 
-            <div class="action-buttons">
+            <nav class="action-buttons" aria-label="Ações e modos de estudo">
+                <a href="flashcards.html" class="btn btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                    FLASHCARDS
+                </a>
+                <a href="caca-palavras.html" class="btn btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                    CAÇA-PALAVRAS
+                </a>
                 <button id="btn-conferir" class="btn btn-primary" type="button">
                     CONFERIR
                 </button>
                 <button id="btn-reiniciar" class="btn btn-danger" type="button">
                     REINICIAR
                 </button>
-            </div>
+            </nav>
         </div>
     </header>
 
@@ -43,7 +46,7 @@
             <div class="panel-header">
                 <span class="dot red"></span>
                 <span class="dot blue"></span>
-                <span class="panel-title">MATRIZ DE MEMÓRIA</span>
+                <span class="panel-title">TABULEIRO DE PALAVRAS</span>
             </div>
             
             <div id="tabuleiro" class="crossword-grid"></div>
@@ -76,86 +79,6 @@
         document.addEventListener("DOMContentLoaded", () => {
             const gridSize = 16;
 
-            // 12 palavras cruzadas com pistas dentro das regras (máx. 15 palavras, sem entregar resposta)
-            const palavras = [
-                // HORIZONTAIS
-                {
-                    numero: 1,
-                    palavra: "MICROCONTROLADOR",
-                    direcao: "H",
-                    linha: 2,
-                    coluna: 0,
-                    pista: "Chip completo com processador, memória e periféricos integrados para sistemas embarcados."
-                },
-                {
-                    numero: 4,
-                    palavra: "ADDRESSBUS",
-                    direcao: "H",
-                    linha: 6,
-                    coluna: 3,
-                    pista: "Caminho unidirecional que transporta a localização física de onde ler ou gravar."
-                },
-                {
-                    numero: 6,
-                    palavra: "REGISTRADORES",
-                    direcao: "H",
-                    linha: 9,
-                    coluna: 1,
-                    pista: "Pequenas unidades de armazenamento interno mais rápidas dentro do processador."
-                },
-                {
-                    numero: 8,
-                    palavra: "DATABUS",
-                    direcao: "H",
-                    linha: 12,
-                    coluna: 5,
-                    pista: "Via bidirecional por onde trafegam as informações entre processador e memória."
-                },
-                {
-                    numero: 10,
-                    palavra: "EEPROM",
-                    direcao: "H",
-                    linha: 14,
-                    coluna: 3,
-                    pista: "Memória não volátil apagável e regravável eletricamente byte a byte."
-                },
-                {
-                    numero: 11,
-                    palavra: "CACHE",
-                    direcao: "H",
-                    linha: 4,
-                    coluna: 10,
-                    pista: "Memória ultrarrápida intermediária que guarda cópias de instruções frequentes."
-                },
-
-                // VERTICAIS
-                {
-                    numero: 2,
-                    palavra: "CPU",
-                    direcao: "V",
-                    linha: 2,
-                    coluna: 2, // Cruza no 'C' de MICROCONTROLADOR
-                    pista: "Cérebro do computador responsável por buscar, decodificar e executar instruções."
-                },
-                {
-                    numero: 3,
-                    palavra: "RAM",
-                    direcao: "V",
-                    linha: 2,
-                    coluna: 3, // Cruza no 'R' de MICROCONTROLADOR e 'A' de ADDRESSBUS
-                    pista: "Memória principal volátil de acesso aleatório para programas em execução."
-                },
-                {
-                    numero: 5,
-                    palavra: "DUALCORE",
-                    direcao: "V",
-                    linha: 6,
-                    coluna: 4, // Cruza no 'D' de ADDRESSBUS e 'G'-> não, vamos ajustar cruzamentos exatos abaixo!
-                    pista: "Processador que possui dois núcleos físicos independentes no mesmo chip."
-                }
-            ];
-
-            // --- MATRIZ DE CRUZAMENTOS 100% VALIDADA ---
             const bancoPalavras = [
                 // HORIZONTAIS
                 {
@@ -195,25 +118,25 @@
                     palavra: "FLASH",
                     direcao: "H",
                     linha: 4,
-                    coluna: 10,
-                    pista: "Armazenamento não volátil rápido usado em pendrives e SSDs."
+                    coluna: 11,
+                    pista: "Memória não volátil de escrita rápida usada em SSDs e pendrives."
                 },
                 {
                     numero: 11,
                     palavra: "CACHE",
                     direcao: "H",
-                    linha: 8,
-                    coluna: 9,
-                    pista: "Memória intermediária de alta velocidade que reduz o tempo de acesso à principal."
+                    linha: 15,
+                    coluna: 4,
+                    pista: "Memória intermediária ultrarrápida que guarda cópias de dados mais acessados."
                 },
 
-                // VERTICAIS (todas cruzando em letras idênticas com as horizontais!)
+                // VERTICAIS
                 {
                     numero: 2,
                     palavra: "CPU",
                     direcao: "V",
                     linha: 2,
-                    coluna: 2, // Cruza com MICROCONTROLADOR[2] = 'C'
+                    coluna: 2,
                     pista: "Cérebro do computador que interpreta e executa as instruções dos programas."
                 },
                 {
@@ -221,23 +144,23 @@
                     palavra: "RAM",
                     direcao: "V",
                     linha: 2,
-                    coluna: 3, // Cruza com MICROCONTROLADOR[3] = 'R'
+                    coluna: 3,
                     pista: "Memória principal volátil usada para guardar programas abertos temporariamente."
                 },
                 {
                     numero: 5,
                     palavra: "DUALCORE",
                     direcao: "V",
-                    linha: 6,
-                    coluna: 3, // Cruza com ADDRESSBUS[1] = 'D', e REGIST[R]ADORES[2] = 'G' (não) -> vamos cruzar em 'O':
-                    pista: "Processador equipado com dois núcleos físicos de execução no mesmo chip."
+                    linha: 5,
+                    coluna: 10,
+                    pista: "Processador que integra dois núcleos independentes de execução no mesmo chip."
                 },
                 {
                     numero: 7,
                     palavra: "ROM",
                     direcao: "V",
                     linha: 10,
-                    coluna: 1, // Cruza com REGISTRADORES[0] = 'R'
+                    coluna: 1,
                     pista: "Memória apenas de leitura que guarda instruções permanentes de inicialização."
                 },
                 {
@@ -245,7 +168,7 @@
                     palavra: "DMA",
                     direcao: "V",
                     linha: 13,
-                    coluna: 5, // Cruza com DATABUS[0] = 'D'
+                    coluna: 5,
                     pista: "Recurso que permite periféricos acessarem a memória sem sobrecarregar o processador."
                 },
                 {
@@ -253,86 +176,12 @@
                     palavra: "ULA",
                     direcao: "V",
                     linha: 3,
-                    coluna: 11, // Cruza com FLASH[1] = 'L' (linha 4, col 11)
-                    pista: "Parte do processador que realiza cálculos matemáticos e comparações lógicas."
+                    coluna: 12,
+                    pista: "Parte do processador que executa cálculos matemáticos e operações lógicas."
                 }
             ];
 
-            // Ajuste fino para o número 5 cruzar perfeitamente:
-            // ADDRESSBUS na linha 6, col 2: A(2) D(3) D(4) R(5) E(6) S(7) S(8) B(9) U(10) S(11)
-            // REGISTRADORES na linha 10, col 1: R(1) E(2) G(3) I(4) S(5) T(6) R(7) A(8) D(9) O(10) R(11) E(12) S(13)
-            // Na coluna 5: ADDRESSBUS tem 'R' (linha 6) e REGISTRADORES tem 'S' (linha 10).
-            // Na coluna 6: ADDRESSBUS tem 'E' (linha 6) e REGISTRADORES tem 'T' (linha 10).
-            // Vamos usar EEPROM na vertical na coluna 6 (linhas 6 a 11): E(6) E(7) P(8) R(9) O(10) M(11) -> cruza com ADDRESSBUS['E'] na linha 6 e passa ao lado, ou cruzamos em outra letra!
-            // Melhor ainda: na coluna 8, ADDRESSBUS tem 'S' (linha 6) e REGISTRADORES tem 'A' (linha 10).
-            // Se colocarmos QUADCORE na vertical na coluna 10 (linhas 3 a 10):
-            // linha 3: Q, linha 4: U, linha 5: A, linha 6: D, linha 7: C, linha 8: O, linha 9: R, linha 10: E!
-            // Olha que encaixe:
-            // - Linha 4, col 10: FLASH começa com 'F' -> se FLASH for na linha 3, col 10, ou se ULA cruzar com FLASH:
-            // Vamos testar na coluna 9:
-            // Linha 6, col 9 = 'B' (de ADDRESSBUS)
-            // Linha 8, col 9 = 'C' (de CACHE)
-            // Linha 10, col 9 = 'D' (de REGISTRADORES)
-            // Linha 13, col 9 = 'B' (de DATABUS)
-            // Se colocarmos EEPROM na linha 12, col 7: E(7) E(8) P(9) R(10) O(11) M(12) -> na col 9 tem 'P'.
-            // Vamos deixar o #5 como EEPROM na vertical na coluna 6, linhas 6 a 11? Não, na linha 10 col 6 é 'T'.
-            // Vamos fazer o #5 cruzar com ADDRESSBUS no 'U' (linha 6, col 10):
-            // Coluna 10: linha 5 = 'D', linha 6 = 'U', linha 7 = 'A', linha 8 = 'L', linha 9 = 'C', linha 10 = 'O', linha 11 = 'R', linha 12 = 'E'!
-            // DUALCORE na col 10 (linhas 5 a 12):
-            // - Linha 6, col 10 = 'U' -> cruza com ADDRESSBUS ('U')!
-            // - Linha 10, col 10 = 'O' -> cruza com REGISTRADORES ('O')!
-            // Encaixe duplo perfeito!
-
-            bancoPalavras[8] = {
-                numero: 5,
-                palavra: "DUALCORE",
-                direcao: "V",
-                linha: 5,
-                coluna: 10,
-                pista: "Processador que integra dois núcleos independentes de execução no mesmo chip."
-            };
-
-            // Verificando conflitos entre DUALCORE (col 10, linhas 5..12) e CACHE (linha 8, col 9..13):
-            // Na linha 8, col 10: DUALCORE tem 'L' (5:D, 6:U, 7:A, 8:L). CACHE tem 'A' (9:C, 10:A). Para não colidir, movemos CACHE para linha 8, col 12: C(12) A(13) C(14) H(15) -> 4 letras, mas CACHE tem 5!
-            // Então movemos CACHE para linha 15, col 7: C(7) A(8) C(9) H(10) E(11)!
-            // E cruzamos CACHE com DATABUS usando EEPROM na col 8 (linhas 12..17 -> grid 17x17 ou linha 11..16):
-            // Coluna 8:
-            // Linha 10, col 8 = 'A' (de REGISTRADORES)
-            // Linha 13, col 8 = 'A' (de DATABUS)
-            // Linha 15, col 8 = 'A' (de CACHE)
-            // Se colocarmos FLASH na vertical na col 12 (linhas 4 a 8):
-            // Linha 4, col 12 = 'F' (cruza com FLASH? Não, #10 pode ser FLASH na horizontal na linha 4, col 11: F(11) L(12) A(13) S(14) H(15)!)
-            // E #12 ULA na vertical na col 12 (linhas 3 a 5): U(3) L(4) A(5) -> cruza com FLASH no 'L' (linha 4, col 12)!
-            // E #11 CACHE na horizontal na linha 15, col 4: C(4) A(5) C(6) H(7) E(8), cruzando com DMA (col 5, linhas 13..15: D(13) M(14) A(15)) no 'A'!
-
-            bancoPalavras[5] = {
-                numero: 11,
-                palavra: "CACHE",
-                direcao: "H",
-                linha: 15,
-                coluna: 4, // C(4) A(5) C(6) H(7) E(8) -> cruza no 'A' com DMA[2] (linha 15, col 5)!
-                pista: "Memória intermediária ultrarrápida que guarda cópias de dados mais acessados."
-            };
-
-            bancoPalavras[4] = {
-                numero: 10,
-                palavra: "FLASH",
-                direcao: "H",
-                linha: 4,
-                coluna: 11, // F(11) L(12) A(13) S(14) H(15)
-                pista: "Memória não volátil de escrita rápida usada em SSDs e pendrives."
-            };
-
-            bancoPalavras[11] = {
-                numero: 12,
-                palavra: "ULA",
-                direcao: "V",
-                linha: 3,
-                coluna: 12, // U(3) L(4) A(5) -> cruza com FLASH no 'L' (linha 4, col 12)
-                pista: "Parte do processador que executa cálculos matemáticos e operações lógicas."
-            };
-
-            // Montando a grade lógica
+            // Monta a grade lógica
             const grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(null));
             const cellNumbers = {};
 
@@ -349,7 +198,7 @@
                 }
             });
 
-            // Renderizando o tabuleiro no HTML
+            // Renderiza o tabuleiro
             const tabuleiroDiv = document.getElementById("tabuleiro");
             const inputsMap = {};
 
@@ -376,13 +225,11 @@
                         input.dataset.col = c;
                         input.setAttribute("aria-label", `Linha ${r + 1}, Coluna ${c + 1}`);
 
-                        // Limpa estado de erro/acerto ao digitar e avança automaticamente
                         input.addEventListener("input", (e) => {
                             e.target.value = e.target.value.replace(/[^a-zA-Z]/g, "").toUpperCase();
                             e.target.classList.remove("correct", "wrong");
 
                             if (e.target.value.length === 1) {
-                                // Tenta avançar para a direita ou para baixo
                                 const nextRight = inputsMap[`${r}-${c + 1}`];
                                 const nextDown = inputsMap[`${r + 1}-${c}`];
                                 if (nextRight && !nextRight.value) {
@@ -397,7 +244,6 @@
                             }
                         });
 
-                        // Navegação com setas do teclado e Backspace
                         input.addEventListener("keydown", (e) => {
                             if (e.key === "Backspace" && !e.target.value) {
                                 const prevLeft = inputsMap[`${r}-${c - 1}`];
@@ -423,7 +269,7 @@
                 }
             }
 
-            // Renderizando as listas de pistas (Horizontais e Verticais)
+            // Renderiza pistas Horizontais e Verticais
             const listaH = document.getElementById("pistas-horizontais");
             const listaV = document.getElementById("pistas-verticais");
 
@@ -446,7 +292,6 @@
             btnConferir.addEventListener("click", () => {
                 let acertos = 0;
 
-                // Limpa classes antes de reavaliar
                 Object.values(inputsMap).forEach(inp => {
                     inp.classList.remove("correct", "wrong");
                 });
@@ -481,7 +326,6 @@
                     }
                 });
 
-                // Aplica cores: verde se pertence a uma palavra certa, vermelho se está errada
                 celulasErradas.forEach(k => inputsMap[k].classList.add("wrong"));
                 celulasCorretas.forEach(k => {
                     inputsMap[k].classList.remove("wrong");
