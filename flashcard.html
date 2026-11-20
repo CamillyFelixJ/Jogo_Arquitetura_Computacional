@@ -1,0 +1,26 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" href="imgtag.PNG"><link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="tema.css"><title>Flashcards - Arquitetura Computacional</title></head><body>
+<header class="topo"><div class="logo"></div><div><span class="badge">SPRINT 3 • ARQUITETURA COMPUTACIONAL</span><h1>FLASHCARDS <span>DE HARDWARE</span></h1></div><img class="mascote" src="img/minion.png" alt="" onerror="this.remove()"><div class="lado"><div class="placar" id="cont">CARD 1 DE 8</div><div class="pista"><i id="kart">🏎️</i><b>🏁</b></div><nav><a class="btn" href="index.html">CRUZADINHA</a>
+<a class="btn" href="caca-palavra.html">CAÇA-PALAVRAS</a>
+<span class="btn ativo">FLASHCARDS</span></nav></div></header>
+<main class="flash"><div class="cena" id="cena" tabindex="0" role="button" aria-label="Virar cartão"><div class="card" id="card">
+<div class="face frente"><span class="tag">PERGUNTA</span><p id="q"></p></div><div class="face verso"><span class="tag">RESPOSTA</span><p id="a"></p></div></div></div>
+<div class="ctrl"><button id="ant" class="btn">◀ ANTERIOR</button><button id="vira" class="btn go">VIRAR CARTÃO</button><button id="prox" class="btn">PRÓXIMO ▶</button></div>
+<p class="dica">Clique no cartão para virar • use as setas ← → do teclado</p></main>
+<script>
+const C=[["Qual é a função principal da CPU?","Buscar, decodificar e executar as instruções dos programas."],
+["O que a ULA realiza dentro do processador?","Executa cálculos aritméticos e operações lógicas de comparação."],
+["Qual é a responsabilidade da Unidade de Controle (UC)?","Gerenciar o fluxo de dados e coordenar as operações internas do processador."],
+["O que são registradores?","Pequenas unidades de memória interna ultrarrápidas localizadas dentro da CPU."],
+["Qual a principal diferença entre RAM e ROM?","A RAM é volátil e guarda dados temporários em execução; a ROM é não volátil e mantém instruções permanentes."],
+["Para que serve o DMA (Acesso Direto à Memória)?","Permite que periféricos transfiram dados diretamente com a memória sem sobrecarregar a CPU."],
+["O que diferencia o Address Bus do Data Bus?","O Address Bus transporta o endereço de memória; o Data Bus transporta os dados lidos ou gravados."],
+["O que é um microcontrolador?","Um circuito integrado único que reúne CPU, memória e periféricos para sistemas embarcados."]];
+let i=0;const card=document.getElementById("card");
+function mostrar(){card.classList.remove("virado");document.getElementById("q").textContent=C[i][0];document.getElementById("a").textContent=C[i][1];
+ document.getElementById("cont").textContent="CARD "+(i+1)+" DE "+C.length;document.getElementById("kart").style.left="calc("+(i/(C.length-1))+" * (100% - 38px) + 4px)"}
+const vira=()=>card.classList.toggle("virado"),mov=d=>{i=(i+d+C.length)%C.length;mostrar()};
+document.getElementById("cena").onclick=vira;document.getElementById("vira").onclick=vira;
+document.getElementById("prox").onclick=()=>mov(1);document.getElementById("ant").onclick=()=>mov(-1);
+document.onkeydown=e=>{if(e.key=="ArrowRight")mov(1);else if(e.key=="ArrowLeft")mov(-1);else if(e.key==" "||e.key=="Enter"){e.preventDefault();vira()}};
+mostrar();
+</script></body></html>

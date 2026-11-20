@@ -1,350 +1,168 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cruzadinha - Arquitetura Computacional</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tema.css">
+  <title>Cruzadinha - Arquitetura Computacional</title>
 </head>
 <body>
+  <header class="topo">
+    <div class="logo"></div>
+    <div>
+      <span class="badge">SPRINT 3 • ARQUITETURA COMPUTACIONAL</span>
+      <h1>CRUZADINHA <span>RUSH!</span></h1>
+    </div>
 
-    <header class="game-header">
-        <div class="title-box">
-            <span class="badge-sprint">SPRINT 3 • ARQUITETURA COMPUTACIONAL</span>
-            <h1>CRUZADINHA <span class="highlight-red">DE HARDWARE</span></h1>
-        </div>
+    <div class="lado">
+      <div class="placar" id="placar">0 de 13 palavras</div>
+      <div class="pista"><i id="kart">🏎️</i><b>🏁</b></div>
+      <nav>
+        <span class="btn ativo">CRUZADINHA</span>
+        <a class="btn" href="caca-palavra.html">CAÇA-PALAVRAS</a>
+        <a class="btn" href="flashcard.html">FLASHCARDS</a>
+        <button id="conferir" class="btn go">CONFERIR</button>
+        <button id="reiniciar" class="btn red">REINICIAR</button>
+      </nav>
+    </div>
 
-        <div class="header-right-area">
-            <div class="score-display">
-                <span class="hud-label">PROGRESSO</span>
-                <span id="contador-acertos" class="hud-value">0 de 12 palavras</span>
-            </div>
+    <!-- Foto dos Minions no lado direito -->
+    <img class="mascote" src="minion.png" alt="Turma dos Minions" onerror="this.remove()">
+  </header>
 
-            <nav class="action-buttons" aria-label="Ações e modos de estudo">
-                <a href="flashcards.html" class="btn btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
-                    FLASHCARDS
-                </a>
-                <a href="caca-palavras.html" class="btn btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
-                    CAÇA-PALAVRAS
-                </a>
-                <button id="btn-conferir" class="btn btn-primary" type="button">
-                    CONFERIR
-                </button>
-                <button id="btn-reiniciar" class="btn btn-danger" type="button">
-                    REINICIAR
-                </button>
-            </nav>
-        </div>
-    </header>
+  <main class="arena">
+    <section class="painel">
+      <h2>🍌 TABULEIRO</h2>
+      <div id="tab" class="tab"></div>
+      <div class="leg">
+        <span><i style="background:var(--ok)"></i>Correta</span>
+        <span><i style="background:var(--bad)"></i>Incorreta</span>
+      </div>
+    </section>
 
-    <main class="game-arena">
-        <!-- Seção do Tabuleiro -->
-        <section class="board-container" aria-label="Tabuleiro da Cruzadinha">
-            <div class="panel-header">
-                <span class="dot red"></span>
-                <span class="dot blue"></span>
-                <span class="panel-title">TABULEIRO DE PALAVRAS</span>
-            </div>
-            
-            <div id="tabuleiro" class="crossword-grid"></div>
+    <aside class="pistas">
+      <div class="painel">
+        <h2>➔ HORIZONTAIS</h2>
+        <ul id="ph"></ul>
+      </div>
+      <div class="painel">
+        <h2>⬇ VERTICAIS</h2>
+        <ul id="pv"></ul>
+      </div>
+    </aside>
+  </main>
 
-            <div class="legend-bar">
-                <span class="legend-item"><i class="box-sample correct"></i> Palavra Correta</span>
-                <span class="legend-item"><i class="box-sample wrong"></i> Palavra Incorreta</span>
-            </div>
-        </section>
+  <script>
+    const W = [
+      ["MICROCONTROLADOR", "H", 4, 1, "Chip único que reúne CPU, memória e entrada e saída no mesmo encapsulamento."],
+      ["REGISTRADORES", "H", 2, 2, "Pequenas memórias dentro da CPU que guardam o dado usado agora."],
+      ["BARRAMENTO", "H", 6, 5, "Conjunto de fios compartilhado que liga CPU, memória e entrada e saída."],
+      ["MEIOSOMADOR", "H", 8, 2, "Circuito com portas XOR e AND que soma dois bits."],
+      ["CLOCK", "H", 11, 3, "Relógio interno que marca o ritmo das batidas da CPU."],
+      ["CACHE", "H", 14, 0, "Memória rápida dentro do processador com cópia do que foi usado há pouco."],
+      ["ULA", "V", 0, 9, "Parte da CPU que faz contas e operações lógicas."],
+      ["SSD", "V", 2, 14, "Camada não volátil onde arquivos e programas ficam guardados de forma permanente."],
+      ["DMA", "V", 3, 1, "Acesso direto à memória em que um controlador copia dados sem ocupar a CPU."],
+      ["CPU", "V", 4, 3, "Unidade central que busca e executa as instruções de um programa."],
+      ["ROM", "V", 4, 10, "Memória não volátil que guarda instruções permanentes de inicialização."],
+      ["RAM", "V", 6, 8, "Memória volátil de trabalho que guarda programas em execução e dados."],
+      ["PIPELINE", "V", 7, 4, "Técnica que divide a execução das instruções em etapas para processar várias ao mesmo tempo."]
+    ].map(([p, d, r, c, t]) => ({ p, d, r, c, t }));
 
-        <!-- Seção das Pistas -->
-        <aside class="clues-container">
-            <div class="clue-card blue-glow">
-                <h2>
-                    <span class="direction-icon">➔</span> HORIZONTAIS
-                </h2>
-                <ul id="pistas-horizontais" class="clue-list"></ul>
-            </div>
+    const g = {};
+    let max = [0, 0];
+    W.forEach(w => {
+      for (let i = 0; i < w.p.length; i++) {
+        const r = w.r + (w.d == "V" ? i : 0), c = w.c + (w.d == "H" ? i : 0);
+        g[r + "-" + c] = w.p[i];
+        max = [Math.max(max[0], r), Math.max(max[1], c)];
+      }
+    });
 
-            <div class="clue-card red-glow">
-                <h2>
-                    <span class="direction-icon">⬇</span> VERTICAIS
-                </h2>
-                <ul id="pistas-verticais" class="clue-list"></ul>
-            </div>
-        </aside>
-    </main>
+    const nums = {};
+    let n = 0;
+    [...W].sort((a, b) => a.r - b.r || a.c - b.c).forEach(w => {
+      const k = w.r + "-" + w.c;
+      if (!nums[k]) nums[k] = ++n;
+      w.n = nums[k];
+    });
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const gridSize = 16;
+    const tab = document.getElementById("tab"), I = {};
+    tab.style.gridTemplateColumns = `repeat(${max[1] + 1},var(--s))`;
+    tab.style.setProperty("--s", "clamp(22px,5.2vw,38px)");
 
-            const bancoPalavras = [
-                // HORIZONTAIS
-                {
-                    numero: 1,
-                    palavra: "MICROCONTROLADOR",
-                    direcao: "H",
-                    linha: 2,
-                    coluna: 0,
-                    pista: "Chip único que integra processador, memória e periféricos para sistemas embarcados."
-                },
-                {
-                    numero: 4,
-                    palavra: "ADDRESSBUS",
-                    direcao: "H",
-                    linha: 6,
-                    coluna: 2,
-                    pista: "Via unidirecional que indica a localização exata na memória para leitura ou escrita."
-                },
-                {
-                    numero: 6,
-                    palavra: "REGISTRADORES",
-                    direcao: "H",
-                    linha: 10,
-                    coluna: 1,
-                    pista: "Unidades internas de armazenamento mais velozes situadas dentro do processador."
-                },
-                {
-                    numero: 8,
-                    palavra: "DATABUS",
-                    direcao: "H",
-                    linha: 13,
-                    coluna: 5,
-                    pista: "Canal bidirecional por onde trafegam informações entre componentes e processador."
-                },
-                {
-                    numero: 10,
-                    palavra: "FLASH",
-                    direcao: "H",
-                    linha: 4,
-                    coluna: 11,
-                    pista: "Memória não volátil de escrita rápida usada em SSDs e pendrives."
-                },
-                {
-                    numero: 11,
-                    palavra: "CACHE",
-                    direcao: "H",
-                    linha: 15,
-                    coluna: 4,
-                    pista: "Memória intermediária ultrarrápida que guarda cópias de dados mais acessados."
-                },
-
-                // VERTICAIS
-                {
-                    numero: 2,
-                    palavra: "CPU",
-                    direcao: "V",
-                    linha: 2,
-                    coluna: 2,
-                    pista: "Cérebro do computador que interpreta e executa as instruções dos programas."
-                },
-                {
-                    numero: 3,
-                    palavra: "RAM",
-                    direcao: "V",
-                    linha: 2,
-                    coluna: 3,
-                    pista: "Memória principal volátil usada para guardar programas abertos temporariamente."
-                },
-                {
-                    numero: 5,
-                    palavra: "DUALCORE",
-                    direcao: "V",
-                    linha: 5,
-                    coluna: 10,
-                    pista: "Processador que integra dois núcleos independentes de execução no mesmo chip."
-                },
-                {
-                    numero: 7,
-                    palavra: "ROM",
-                    direcao: "V",
-                    linha: 10,
-                    coluna: 1,
-                    pista: "Memória apenas de leitura que guarda instruções permanentes de inicialização."
-                },
-                {
-                    numero: 9,
-                    palavra: "DMA",
-                    direcao: "V",
-                    linha: 13,
-                    coluna: 5,
-                    pista: "Recurso que permite periféricos acessarem a memória sem sobrecarregar o processador."
-                },
-                {
-                    numero: 12,
-                    palavra: "ULA",
-                    direcao: "V",
-                    linha: 3,
-                    coluna: 12,
-                    pista: "Parte do processador que executa cálculos matemáticos e operações lógicas."
-                }
-            ];
-
-            // Monta a grade lógica
-            const grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(null));
-            const cellNumbers = {};
-
-            bancoPalavras.forEach(item => {
-                const key = `${item.linha}-${item.coluna}`;
-                if (!cellNumbers[key]) {
-                    cellNumbers[key] = item.numero;
-                }
-
-                for (let i = 0; i < item.palavra.length; i++) {
-                    const r = item.direcao === "H" ? item.linha : item.linha + i;
-                    const c = item.direcao === "H" ? item.coluna + i : item.coluna;
-                    grid[r][c] = item.palavra[i];
-                }
-            });
-
-            // Renderiza o tabuleiro
-            const tabuleiroDiv = document.getElementById("tabuleiro");
-            const inputsMap = {};
-
-            for (let r = 0; r < gridSize; r++) {
-                for (let c = 0; c < gridSize; c++) {
-                    const cell = document.createElement("div");
-                    cell.classList.add("cell");
-
-                    if (grid[r][c] === null) {
-                        cell.classList.add("blocked");
-                    } else {
-                        const key = `${r}-${c}`;
-                        if (cellNumbers[key]) {
-                            const numSpan = document.createElement("span");
-                            numSpan.classList.add("cell-number");
-                            numSpan.textContent = cellNumbers[key];
-                            cell.appendChild(numSpan);
-                        }
-
-                        const input = document.createElement("input");
-                        input.type = "text";
-                        input.maxLength = 1;
-                        input.dataset.row = r;
-                        input.dataset.col = c;
-                        input.setAttribute("aria-label", `Linha ${r + 1}, Coluna ${c + 1}`);
-
-                        input.addEventListener("input", (e) => {
-                            e.target.value = e.target.value.replace(/[^a-zA-Z]/g, "").toUpperCase();
-                            e.target.classList.remove("correct", "wrong");
-
-                            if (e.target.value.length === 1) {
-                                const nextRight = inputsMap[`${r}-${c + 1}`];
-                                const nextDown = inputsMap[`${r + 1}-${c}`];
-                                if (nextRight && !nextRight.value) {
-                                    nextRight.focus();
-                                } else if (nextDown && !nextDown.value) {
-                                    nextDown.focus();
-                                } else if (nextRight) {
-                                    nextRight.focus();
-                                } else if (nextDown) {
-                                    nextDown.focus();
-                                }
-                            }
-                        });
-
-                        input.addEventListener("keydown", (e) => {
-                            if (e.key === "Backspace" && !e.target.value) {
-                                const prevLeft = inputsMap[`${r}-${c - 1}`];
-                                const prevUp = inputsMap[`${r - 1}-${c}`];
-                                if (prevLeft) prevLeft.focus();
-                                else if (prevUp) prevUp.focus();
-                            } else if (e.key === "ArrowRight" && inputsMap[`${r}-${c + 1}`]) {
-                                inputsMap[`${r}-${c + 1}`].focus();
-                            } else if (e.key === "ArrowLeft" && inputsMap[`${r}-${c - 1}`]) {
-                                inputsMap[`${r}-${c - 1}`].focus();
-                            } else if (e.key === "ArrowDown" && inputsMap[`${r + 1}-${c}`]) {
-                                inputsMap[`${r + 1}-${c}`].focus();
-                            } else if (e.key === "ArrowUp" && inputsMap[`${r - 1}-${c}`]) {
-                                inputsMap[`${r - 1}-${c}`].focus();
-                            }
-                        });
-
-                        inputsMap[key] = input;
-                        cell.appendChild(input);
-                    }
-
-                    tabuleiroDiv.appendChild(cell);
-                }
+    for (let r = 0; r <= max[0]; r++) {
+      for (let c = 0; c <= max[1]; c++) {
+        const k = r + "-" + c, d = document.createElement("div");
+        d.className = "c";
+        if (!g[k]) {
+          d.classList.add("vazio");
+        } else {
+          if (nums[k]) d.innerHTML = '<span class="num">' + nums[k] + '</span>';
+          const i = document.createElement("input");
+          i.maxLength = 1;
+          I[k] = i;
+          i.oninput = () => {
+            i.value = i.value.replace(/[^a-zA-Z]/g, "").toUpperCase();
+            i.classList.remove("correct", "wrong");
+            if (i.value) {
+              const a = I[r + "-" + (c + 1)], b = I[(r + 1) + "-" + c];
+              (a && !a.value ? a : b && !b.value ? b : a || b)?.focus();
             }
+          };
+          i.onkeydown = e => {
+            const m = { ArrowRight: [0, 1], ArrowLeft: [0, -1], ArrowDown: [1, 0], ArrowUp: [-1, 0] }[e.key];
+            if (m) I[(r + m[0]) + "-" + (c + m[1])]?.focus();
+            else if (e.key == "Backspace" && !i.value) (I[r + "-" + (c - 1)] || I[(r - 1) + "-" + c])?.focus();
+          };
+          d.appendChild(i);
+        }
+        tab.appendChild(d);
+      }
+    }
 
-            // Renderiza pistas Horizontais e Verticais
-            const listaH = document.getElementById("pistas-horizontais");
-            const listaV = document.getElementById("pistas-verticais");
+    W.sort((a, b) => a.n - b.n).forEach(w => {
+      const li = document.createElement("li");
+      li.innerHTML = "<strong>" + w.n + ".</strong> " + w.t;
+      document.getElementById(w.d == "H" ? "ph" : "pv").appendChild(li);
+    });
 
-            bancoPalavras
-                .sort((a, b) => a.numero - b.numero)
-                .forEach(item => {
-                    const li = document.createElement("li");
-                    li.innerHTML = `<strong>${item.numero}.</strong> ${item.pista}`;
-                    if (item.direcao === "H") {
-                        listaH.appendChild(li);
-                    } else {
-                        listaV.appendChild(li);
-                    }
-                });
+    const cells = w => [...w.p].map((ch, i) => [(w.r + (w.d == "V" ? i : 0)) + "-" + (w.c + (w.d == "H" ? i : 0)), ch]);
 
-            // Botão CONFERIR
-            const btnConferir = document.getElementById("btn-conferir");
-            const contadorAcertos = document.getElementById("contador-acertos");
+    function placar(a) {
+      document.getElementById("placar").textContent = a == W.length ? "🏆 CORRIDA VENCIDA! " + a + " de " + W.length : a + " de " + W.length + " palavras";
+      document.getElementById("kart").style.left = "calc(" + (a / W.length) + " * (100% - 38px) + 4px)";
+    }
 
-            btnConferir.addEventListener("click", () => {
-                let acertos = 0;
+    document.getElementById("conferir").onclick = () => {
+      let a = 0;
+      Object.values(I).forEach(i => i.classList.remove("correct", "wrong"));
+      const ok = new Set, bad = new Set;
+      W.forEach(w => {
+        const cs = cells(w);
+        if (cs.every(([k, ch]) => I[k].value == ch)) {
+          a++;
+          cs.forEach(([k]) => ok.add(k));
+        } else {
+          cs.forEach(([k]) => I[k].value && bad.add(k));
+        }
+      });
+      bad.forEach(k => I[k].classList.add("wrong"));
+      ok.forEach(k => {
+        I[k].classList.remove("wrong");
+        I[k].classList.add("correct");
+      });
+      placar(a);
+    };
 
-                Object.values(inputsMap).forEach(inp => {
-                    inp.classList.remove("correct", "wrong");
-                });
-
-                const celulasCorretas = new Set();
-                const celulasErradas = new Set();
-
-                bancoPalavras.forEach(item => {
-                    let palavraCompleta = true;
-                    const coords = [];
-
-                    for (let i = 0; i < item.palavra.length; i++) {
-                        const r = item.direcao === "H" ? item.linha : item.linha + i;
-                        const c = item.direcao === "H" ? item.coluna + i : item.coluna;
-                        const key = `${r}-${c}`;
-                        coords.push(key);
-
-                        if (inputsMap[key].value !== item.palavra[i]) {
-                            palavraCompleta = false;
-                        }
-                    }
-
-                    if (palavraCompleta) {
-                        acertos++;
-                        coords.forEach(k => celulasCorretas.add(k));
-                    } else {
-                        coords.forEach(k => {
-                            if (inputsMap[k].value !== "") {
-                                celulasErradas.add(k);
-                            }
-                        });
-                    }
-                });
-
-                celulasErradas.forEach(k => inputsMap[k].classList.add("wrong"));
-                celulasCorretas.forEach(k => {
-                    inputsMap[k].classList.remove("wrong");
-                    inputsMap[k].classList.add("correct");
-                });
-
-                contadorAcertos.textContent = `${acertos} de ${bancoPalavras.length} palavras`;
-            });
-
-            // Botão REINICIAR
-            const btnReiniciar = document.getElementById("btn-reiniciar");
-            btnReiniciar.addEventListener("click", () => {
-                Object.values(inputsMap).forEach(inp => {
-                    inp.value = "";
-                    inp.classList.remove("correct", "wrong");
-                });
-                contadorAcertos.textContent = `0 de ${bancoPalavras.length} palavras`;
-            });
-        });
-    </script>
+    document.getElementById("reiniciar").onclick = () => {
+      Object.values(I).forEach(i => {
+        i.value = "";
+        i.classList.remove("correct", "wrong");
+      });
+      placar(0);
+    };
+  </script>
 </body>
 </html>
