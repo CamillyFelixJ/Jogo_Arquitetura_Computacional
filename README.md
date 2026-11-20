@@ -1,5 +1,10 @@
 # Jogo_Arquitetura_Computacional
 
+<<<<<<< HEAD
+=======
+# Jogo_Arquitetura_Computacional
+
+>>>>>>> 1fe1d324ba9db5a3a12e2502ad3d2f7ef495acc3
 # Cruzadinha de Arquitetura Computacional
 
 Projeto desenvolvido para a atividade avaliativa da **Sprint 3** da disciplina de **Arquitetura Computacional**[cite: 1]. O site reúne um jogo de palavras cruzadas no navegador sobre conceitos de hardware[cite: 1], além de modos complementares de estudo com **Flashcards** e **Caça-Palavras**, com visual em verde escuro e amarelo.
