@@ -16,8 +16,7 @@
     </div>
 
     <div class="lado">
-      
-      <div class="placar" id="placar">0 de 13 palavras</div>
+      <div class="placar" id="placar">0 de 12 palavras</div>
       <div class="pista"><i id="kart">🏎️</i><b>🏁</b></div>
       <nav>
         <span class="btn ativo">CRUZADINHA</span>
@@ -27,7 +26,6 @@
         <button id="reiniciar" class="btn red">REINICIAR</button>
       </nav>
     </div>
-
   </header>
 
   <main class="arena">
@@ -53,31 +51,102 @@
   </main>
 
   <script>
-    const W = [
-      ["MICROCONTROLADOR", "H", 4, 1, "Chip único que reúne CPU, memória e entrada e saída no mesmo encapsulamento."],
-      ["REGISTRADORES", "H", 2, 2, "Pequenas memórias dentro da CPU que guardam o dado usado agora."],
-      ["BARRAMENTO", "H", 6, 5, "Conjunto de fios compartilhado que liga CPU, memória e entrada e saída."],
-      ["MEIOSOMADOR", "H", 8, 2, "Circuito com portas XOR e AND que soma dois bits."],
-      ["CLOCK", "H", 11, 3, "Relógio interno que marca o ritmo das batidas da CPU."],
-      ["CACHE", "H", 14, 0, "Memória rápida dentro do processador com cópia do que foi usado há pouco."],
-      ["ULA", "V", 0, 9, "Parte da CPU que faz contas e operações lógicas."],
-      ["SSD", "V", 2, 14, "Camada não volátil onde arquivos e programas ficam guardados de forma permanente."],
-      ["DMA", "V", 3, 1, "Acesso direto à memória em que um controlador copia dados sem ocupar a CPU."],
-      ["CPU", "V", 4, 3, "Unidade central que busca e executa as instruções de um programa."],
-      ["ROM", "V", 4, 10, "Memória não volátil que guarda instruções permanentes de inicialização."],
-      ["RAM", "V", 6, 8, "Memória volátil de trabalho que guarda programas em execução e dados."],
-      ["PIPELINE", "V", 7, 4, "Técnica que divide a execução das instruções em etapas para processar várias ao mesmo tempo."]
-    ].map(([p, d, r, c, t]) => ({ p, d, r, c, t }));
+    const DADOS = [
+      ["MICROCONTROLADOR", "Chip único que reúne processador, memória e portas de entrada e saída."],
+      ["REGISTRADORES", "Pequenas memórias internas do processador que guardam dados de uso imediato."],
+      ["DUALCORE", "Processador com dois núcleos independentes de execução no mesmo chip."],
+      ["QUADCORE", "Processador que reúne quatro núcleos de execução no mesmo encapsulamento."],
+      ["DATABUS", "Via bidirecional por onde circulam os dados lidos ou escritos na memória."],
+      ["CACHE", "Memória intermediária ultrarrápida que guarda cópias de dados acessados com frequência."],
+      ["FLASH", "Memória não volátil regravável usada em pendrives e unidades sólidas."],
+      ["RAM", "Memória volátil de trabalho que armazena dados e programas em execução."],
+      ["ROM", "Memória não volátil que mantém instruções permanentes gravadas de fábrica."],
+      ["CPU", "Componente central que busca, decodifica e executa as instruções dos programas."],
+      ["ULA", "Parte do processador que executa cálculos matemáticos e comparações lógicas."],
+      ["DMA", "Permite que periféricos transfiram dados com a memória sem ocupar o processador."]
+    ];
 
-    const g = {};
-    let max = [0, 0];
-    W.forEach(w => {
-      for (let i = 0; i < w.p.length; i++) {
-        const r = w.r + (w.d == "V" ? i : 0), c = w.c + (w.d == "H" ? i : 0);
-        g[r + "-" + c] = w.p[i];
-        max = [Math.max(max[0], r), Math.max(max[1], c)];
+    function gerarCruzadinha(itens) {
+      for (let tentativa = 0; tentativa < 300; tentativa++) {
+        const grade = {};
+        const colocadas = [];
+        const primeira = itens[0];
+        const dirInicial = tentativa % 2 === 0 ? "H" : "V";
+
+        for (let i = 0; i < primeira[0].length; i++) {
+          const r = dirInicial === "V" ? i : 4;
+          const c = dirInicial === "H" ? i : 4;
+          grade[r + "-" + c] = primeira[0][i];
+        }
+        colocadas.push({
+          p: primeira[0],
+          t: primeira[1],
+          d: dirInicial,
+          r: dirInicial === "V" ? 0 : 4,
+          c: dirInicial === "H" ? 0 : 4
+        });
+
+        let falhou = false;
+        for (let idx = 1; idx < itens.length; idx++) {
+          const [palavra, pista] = itens[idx];
+          const candidatos = [];
+
+          for (const w of colocadas) {
+            const novaDir = w.d === "H" ? "V" : "H";
+            for (let i = 0; i < palavra.length; i++) {
+              for (let j = 0; j < w.p.length; j++) {
+                if (palavra[i] !== w.p[j]) continue;
+
+                const cr = w.r + (w.d === "V" ? j : 0);
+                const cc = w.c + (w.d === "H" ? j : 0);
+                const startR = cr - (novaDir === "V" ? i : 0);
+                const startC = cc - (novaDir === "H" ? i : 0);
+
+                if (startR < 0 || startC < 0) continue;
+
+                let cabe = true;
+                for (let k = 0; k < palavra.length; k++) {
+                  const rr = startR + (novaDir === "V" ? k : 0);
+                  constCC = startC + (novaDir === "H" ? k : 0);
+                  const key = rr + "-" + constCC;
+                  if (grade[key] && grade[key] !== palavra[k]) {
+                    cabe = false;
+                    break;
+                  }
+                }
+                if (cabe) candidatos.push({ r: startR, c: startC, d: novaDir });
+              }
+            }
+          }
+
+          if (!candidatos.length) {
+            falhou = true;
+            break;
+          }
+
+          const escolhido = candidatos[(Math.random() * candidatos.length) | 0];
+          for (let k = 0; k < palavra.length; k++) {
+            const rr = escolhido.r + (escolhido.d === "V" ? k : 0);
+            const cc = escolhido.c + (escolhido.d === "H" ? k : 0);
+            grade[rr + "-" + cc] = palavra[k];
+          }
+          colocadas.push({ p: palavra, t: pista, d: escolhido.d, r: escolhido.r, c: escolhido.c });
+        }
+
+        if (!falhou) {
+          let maxR = 0, maxC = 0;
+          Object.keys(grade).forEach(k => {
+            const [rr, cc] = k.split("-").map(Number);
+            maxR = Math.max(maxR, rr);
+            maxC = Math.max(maxC, cc);
+          });
+          return { W: colocadas, g: grade, max: [maxR, maxC] };
+        }
       }
-    });
+      throw new Error("Não foi possível montar o tabuleiro sem conflito.");
+    }
+
+    const { W, g, max } = gerarCruzadinha(DADOS);
 
     const nums = {};
     let n = 0;
